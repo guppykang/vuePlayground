@@ -1,5 +1,15 @@
 <template>
   <div id="app">
+    <p> {{username}} </p>
+    <p> text from input text : {{inputText}} </p>
+
+    <input v-model="inputText">
+
+    <p>Displaying a list : </p>
+    <li v-for="todo in todos" v-bind:key="todo.id" >
+      {{todo.text}}
+    </li>
+
     <Header/>
 
     <b-container class="bv-example-row">
@@ -31,7 +41,14 @@ export default {
   data() {
     return {
       questions: [], 
-      index: 0
+      index: 0, 
+      username : "guppykang", 
+      inputText : "", 
+      todos : [
+        {text : '1. Learn Vue.js'}, 
+        {text : '2. Ask Lance about my project'}, 
+        {text : '3. Get started on my project asap'}
+      ]
     }
   },
   methods: {

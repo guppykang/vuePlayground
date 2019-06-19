@@ -15,7 +15,7 @@
             </p>
 
             <b-button variant="primary" href="#">Submit</b-button>
-            <b-button @click="next" variant="success" href="#">Next 
+            <b-button v-on:click="next" variant="success" href="#">Next 
 
             </b-button>
         </b-jumbotron>
@@ -31,3 +31,4 @@ export default {
     }
 }
 </script>
+l
