@@ -16,6 +16,7 @@
 
 </template>
 
+//yo what up Lance
 
 <script> 
 export default { 
