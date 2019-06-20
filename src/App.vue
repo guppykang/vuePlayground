@@ -5,7 +5,6 @@
 
     <input v-model="inputText">
 
-    <p>Displaying a list : </p>
     <li v-for="todo in todos" v-bind:key="todo.id" >
       {{todo.text}}
     </li>
@@ -36,7 +35,6 @@ export default {
   components: {
     Header, 
     QuestionBox
-
   }, 
   data() {
     return {
