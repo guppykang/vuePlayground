@@ -5,7 +5,8 @@ const axios = require('axios')
 //to create the v4 signature for the api calls for mcqueen (not sure if mcqueen supports aws-sdk)
 var crypto = require("crypto-js");
 
-var keys = require('./config/config.js');
+const keys = require('./config/config.js');
+
 
 //to create the random object keys
 var uuid = require('uuid');
@@ -28,6 +29,12 @@ var fullDate = '' + year + month + day;
 //service : I have no idea if this is right. The docs did not mention this. aws examples say "ec2", but we're using mcqueen
 var service = "mcqueen";
 
+var algorithm = 'AWS4-HMAC-SHA256';
+var credential_scope = fullDate + '/' + region + '/' + service + '/' + 'aws4_request';
+var signed_headers = 'host;x-amz-date';
+//missing signature variable here
+
+
 
 
 //getting the signature v4 as shown here : https://docs.aws.amazon.com/general/latest/gr/signature-v4-examples.html#signature-v4-examples-javascript
@@ -42,7 +49,7 @@ function getSignatureKey(key, dateStamp, regionName, serviceName) {
 
 function checkKeys(ACCESS_KEY_ID, SECRET_ACCESS_KEY) {
     if (ACCESS_KEY_ID == null || SECRET_ACCESS_KEY == null){
-        console.log("missing access keys to interact with mcqueen s3");
+        console.log("missing access keys to interact with mcqueen");
     }
     else {
         console.log("all keys present");
@@ -53,7 +60,9 @@ function checkKeys(ACCESS_KEY_ID, SECRET_ACCESS_KEY) {
     }
 }
 
-function postToMcqueen(ACCESS_KEY_ID, SECRET_ACCESS_KEY ){
+function postToMcqueen(ACCESS_KEY_ID, SECRET_ACCESS_KEY){
+    checkKeys(keys.ACCESS_KEY_ID, keys.SECRET_ACCESS_KEY);
+    authorization_header = algorithm + ' ' + 'Credential=' + SECRET_ACCESS_KEY + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
 
 }
 
