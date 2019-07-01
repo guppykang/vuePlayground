@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <input type="file"
-       id="listPickerImage" name="listPickerImage"
-       accept="image/png, image/jpeg">
+    <button class="submit-button" v-on:click="handleSubmit()">Submit</button>
 
     <p> {{username}} </p>
     <p> text from input text : {{inputText}} </p>
@@ -69,6 +67,8 @@ import QuestionBox from './components/QuestionBox.vue'
 import DrinkingLabel from './components/DrinkingLabel.vue'
 import FileUpload from './components/FileUpload'
 
+import axios from 'axios';
+
 export default {
   name: 'app',
   components: {
@@ -89,12 +89,18 @@ export default {
         {id : 2, text : '2. Ask Lance about my project'},
         {id : 3, text : '3. Get started on my project asap'}
       ], 
-      vbindLabel : "Underage drinking is bad Josh!"
-    }
+      vbindLabel : "Underage drinking is bad Josh!", 
+      response : ""
+     }
   },
   methods: {
     next() {
       this.index++
+    }, 
+    async handleSubmit() {
+      const iResponse = await axios.get('/test');
+      
+      alert(iResponse.data);
     }
   },
   computed: {

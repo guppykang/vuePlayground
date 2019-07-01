@@ -10,7 +10,11 @@
     </div>
 </template>
 
+
 <script>
+
+import axios from 'axios';
+
 export default {
     props : { 
         didHappen : {
@@ -28,6 +32,7 @@ export default {
     }, 
     methods: {
         message2OnClick() {
+            axios
             this.count++;
         }
     }

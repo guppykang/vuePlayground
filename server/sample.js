@@ -37,12 +37,19 @@ let fileToStore =  'maxresdefault.jpg'
 //'obesity-meme.png';
 
 /*************************** Routes **************************/
-app.get('/', async (req, res) => {
+app.get('/test', async (req, res) => {
+  res.send('What up Lance');
+})
+
+app.get('/himom', async (req, res) => {
   res.send('api/upload for uploading image, and api/download for downloading image');
   const buckets = await getBuckets();
 })
 
-app.get('/api/upload', async (req, res) => {
+
+
+app.post('/api/upload', async (req, res) => {
+  
 
   let sucessful; 
   try {
@@ -71,6 +78,9 @@ app.get('/api/download', async (req, res) => {
 
 })
 
+app.get('/api/testmessage', async(req, res) => {
+  
+})
 
 
 /*************************** Put **************************/
