@@ -13,7 +13,6 @@
 
 <script>
 
-import axios from 'axios';
 
 export default {
     props : { 
@@ -32,7 +31,6 @@ export default {
     }, 
     methods: {
         message2OnClick() {
-            axios
             this.count++;
         }
     }

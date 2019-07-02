@@ -37,8 +37,41 @@ let fileToStore =  'maxresdefault.jpg'
 //'obesity-meme.png';
 
 /*************************** Routes **************************/
+app.get('/getURL', async(req, res) => {
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+
+  const params = {
+    Bucket : bucketName, 
+    Key : fileName, 
+    Expires : 60, 
+    ContentType : fileType 
+  };
+
+  s3.getSignedUrl('putObject', params, (err, data) => {
+    if(err) {
+      console.log(err)
+      return res.end()
+    }
+    const returnData = {
+      signedRequest : data, 
+      url : `https://${bucketName}.store-test.bloblstore.apple.com/${fileName}` 
+    }
+    res.send(returnData);
+    res.end()
+  })
+
+});
 app.get('/test', async (req, res) => {
-  res.send('What up Lance');
+  // res.send('What up Lance');
+  let returnData = {
+    message : "what's up lance", 
+    otherMessage : "what's good Lance"
+  
+  };
+
+  res.send(returnData)
+  console.log('hit /test')
 })
 
 app.get('/himom', async (req, res) => {

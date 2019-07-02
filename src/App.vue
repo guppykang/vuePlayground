@@ -98,9 +98,11 @@ export default {
       this.index++
     }, 
     async handleSubmit() {
-      const iResponse = await axios.get('/test');
+      const returnData = await axios.get('/test');
       
-      alert(iResponse.data);
+      alert(returnData.data.message);
+      console.log(returnData.data);
+
     }
   },
   computed: {
