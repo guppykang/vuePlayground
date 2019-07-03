@@ -98,11 +98,13 @@ export default {
       this.index++
     }, 
     async handleSubmit() {
-      const returnData = await axios.get('/test');
+      const data = {
+        message : 'hi Lance'
+      };
+      await axios.post('/testPost', data);
       
-      alert(returnData.data.message);
-      console.log(returnData.data);
-
+      //const res = await axios.get('/test'); 
+      //console.log(res.data.otherMessage)
     }
   },
   computed: {

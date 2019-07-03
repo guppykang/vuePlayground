@@ -27,10 +27,14 @@ base64Img.imgPromise = promisify(base64Img.img);
 let bucketName = 'node-sdk-sample-';
 let keyName = 'hello_world.txt';
 
+const bodyParser = require('body-parser'); 
+app.use(bodyParser.urlencoded({extended : true, limit: '50mb'}));
+app.use (bodyParser.json({limit: '50mb'}));
+
 // Create the parameters for calling createBucket
 let bucketParams = {
   Bucket : bucketName,
-  ACL : 'public-read'
+  ACL : 'public-read-write'
 };
 
 let fileToStore =  'maxresdefault.jpg'
@@ -44,8 +48,8 @@ app.get('/getURL', async(req, res) => {
   const params = {
     Bucket : bucketName, 
     Key : fileName, 
-    Expires : 60, 
-    ContentType : fileType 
+    Expires : 3600, 
+    ContentType : 'image/png'  
   };
 
   s3.getSignedUrl('putObject', params, (err, data) => {
@@ -62,6 +66,14 @@ app.get('/getURL', async(req, res) => {
   })
 
 });
+
+
+app.post('/testPost', async (req, res) => {
+  console.log('hit /testPost')
+  console.log(req.body)
+});
+
+
 app.get('/test', async (req, res) => {
   // res.send('What up Lance');
   let returnData = {
@@ -74,6 +86,8 @@ app.get('/test', async (req, res) => {
   console.log('hit /test')
 })
 
+
+
 app.get('/himom', async (req, res) => {
   res.send('api/upload for uploading image, and api/download for downloading image');
   const buckets = await getBuckets();
@@ -83,30 +97,37 @@ app.get('/himom', async (req, res) => {
 
 app.post('/api/upload', async (req, res) => {
   
+  const base64Data = req.body.base64;
+  console.log(base64Data);
+  const fileName = req.query['file-name'];
+  console.log( fileName)
+  
 
   let sucessful; 
   try {
-    sucessful = await uploadObject(bucketName, fileToStore);
+    sucessful = await uploadObject(bucketName, fileName, base64Data);
   }
   catch(err) {
     console.log(err)
   }
 
-  console.log(sucessful);
-  
+  // console.log(sucessful);
+  res.send(sucessful);
 })
 
 
 app.get('/api/download', async (req, res) => {
-  let sucessful; 
+  const fileName = req.query['file-name'];
+  let sucessful = false; 
   try {
-    sucessful = await downloadObject(bucketName, fileToStore, './downloadFile');
+    sucessful = await downloadObject(bucketName, fileName, './downloadFile');
+    res.send(sucessful);
+    
   }
   catch(err) {
     console.log(err)
   }
 
-  console.log(sucessful);
   
 
 })
@@ -133,32 +154,26 @@ function createUploadParams(bucketName, key, blob) {
   }
 }
 
-async function uploadObject(bucketName, key) {
-  let base64Conversion;
-  try {  
-    base64Conversion = await base64(key);
+async function uploadObject(bucketName, key, base64Conversion ) {
+  console.log(base64Conversion)
+  let params = createUploadParams(bucketName, key, base64Conversion.toString());
 
-    let params = createUploadParams(bucketName, key, base64Conversion.toString());
- 
-    let sucessful = false;
+  let sucessful = false;
 
-    //thanks Devon ur a homie
+  //thanks Devon ur a homie
 
-    try {
-      const data = await s3.putObjectPromise(params);
-      sucessful = true;
-      console.log("Putting object Success ", data);
-    }
-    catch (err) {
-      console.log("ERROR FROM JOSHUA : Putting object Error", err);
-      sucessful = false;
-    }
-    
-    return sucessful;
+  try {
+    const data = await s3.putObjectPromise(params);
+    sucessful = true;
+    console.log("Putting object Success ", data);
   }
-    catch (err) {
-      console.log(err);
-    }
+  catch (err) {
+    console.log("ERROR FROM JOSHUA : Putting object Error", err);
+    sucessful = false;
+  }
+  
+  return sucessful;
+ 
 
   
 }
@@ -175,26 +190,26 @@ function createDownloadParams(bucketName, key) {
   }
 }
 
-async function downloadObject(bukcetName, key, destination) {
+async function downloadObject(bucketName, key) {
 
   const params = createDownloadParams(bucketName, key);
 
   try {
     const data = await s3.getObjectPromise(params);
-    console.log(data);
-    //TODO: this is still lmessed up check the output file
-    fs.writeFileSync(destination, data.Body)
-
-    let filePath; 
-    try {
-      filePath = await base64Img.imgPromise('data:image/png;base64, ' + data.Body.toString(), './files', 'obesityMemeDownloaded' )
-      console.log('FILEPATH: ' + filePath);
-    }
-    catch (err) {
-      console.log(err);
-    }
-
+    // console.log("data : " + data.Body);
     return data.Body;
+  //   fs.writeFileSync(destination, data.Body)
+
+  //   let filePath; 
+  //   try {
+  //     filePath = await base64Img.imgPromise('data:image/png;base64, ' + data.Body.toString(), './files', 'obesityMemeDownloaded' )
+  //     console.log('FILEPATH: ' + filePath);
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
+
+  //   return data.Body;
   }
   catch (err) {
     console.log(err);
