@@ -27,6 +27,8 @@ base64Img.imgPromise = promisify(base64Img.img);
 let bucketName = 'node-sdk-sample-';
 let keyName = 'hello_world.txt';
 
+const db = require('./db');
+
 const bodyParser = require('body-parser'); 
 app.use(bodyParser.urlencoded({extended : true, limit: '50mb'}));
 app.use (bodyParser.json({limit: '50mb'}));
