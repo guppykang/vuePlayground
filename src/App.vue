@@ -55,8 +55,14 @@
 
     
     </b-tab>
-    <b-tab title="Second"><p>I'm the second tab</p></b-tab>
+    <b-tab title="Second">
+      <p>I'm the second tab</p>
+      <ToggledLabel/>
+    </b-tab>
   </b-tabs>
+
+
+
 
   </div>
 </template>
@@ -66,6 +72,8 @@ import Header from './components/Header.vue'
 import QuestionBox from './components/QuestionBox.vue'
 import DrinkingLabel from './components/DrinkingLabel.vue'
 import FileUpload from './components/FileUpload'
+import ToggledLabel from './components/ToggledLabel'
+
 
 import axios from 'axios';
 
@@ -75,7 +83,8 @@ export default {
     Header, 
     QuestionBox, 
     DrinkingLabel, 
-    FileUpload
+    FileUpload, 
+    ToggledLabel
   }, 
   data() {
     return {
