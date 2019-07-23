@@ -24,7 +24,7 @@ base64Img.imgPromise = promisify(base64Img.img);
 
 
 // Create a bucket and upload something into it
-let bucketName = 'node-sdk-sample-';
+let bucketName = 'ckit-test-images-';//'node-sdk-sample-';
 let keyName = 'hello_world.txt';
 
 const db = require('./db');
